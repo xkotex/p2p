@@ -1,4 +1,4 @@
-package com.example.EchoServer.controller;
+package com.example.EchoServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,36 +12,35 @@ public class DemoClient {
     public static void main(String[] args) {
         Socket socket = null;
         BufferedReader bufferedReader = null;
-
         try {
             socket = new Socket(InetAddress.getLocalHost(), 8071);
 
             PrintStream printStream = new PrintStream(socket.getOutputStream());
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            while (true){
+            while (true) {
                 printStream.println("CONNECT");
                 System.out.println(bufferedReader.readLine());
-                Thread.sleep(1000);
+                Thread.sleep(30000);
             }
-        } catch (UnknownHostException e){
+        } catch (UnknownHostException e) {
             System.err.println("адрес недоступен " + e);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.err.println("ошибка I/O потока" + e);
         } catch (InterruptedException e) {
             System.err.println("ошибка потока выполнения " + e);
         } finally {
-            if (bufferedReader != null){
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if (socket != null){
+            if (socket != null) {
                 try {
                     socket.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
