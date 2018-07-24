@@ -48,7 +48,6 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void getMyInfo() {
@@ -58,10 +57,10 @@ public class Server {
         this.externalAddress = NetworkEnvironment.getExternalAddress();
     }
 
-    private void showMyInfo(){
-        logger.infof("My hash: "+myHash);
-        logger.infof("My local address: "+localAddress+" | mac address: "+localMacAddress);
-        logger.infof("My external address: "+externalAddress);
+    private void showMyInfo() {
+        logger.infof("My hash: " + myHash);
+        logger.infof("My local address: " + localAddress + " | mac address: " + localMacAddress);
+        logger.infof("My external address: " + externalAddress);
     }
 
     private void startServer() throws Exception {
@@ -81,17 +80,14 @@ public class Server {
             client = new Client(channelGroup, connections);
             client.run();
 
-
             listenerChannel.closeFuture().sync();
         } finally {
             connections.shutdownGracefully();
             listener.shutdownGracefully();
-
-
         }
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 
