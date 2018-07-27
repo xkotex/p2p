@@ -11,6 +11,10 @@ import java.util.Set;
 @Table(name = "user")
 public class User {
 
+    public User(){
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")

@@ -1,7 +1,5 @@
 package com.simple_p2p.controller;
 
-import javax.validation.Valid;
-
 import com.simple_p2p.model.User;
 import com.simple_p2p.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class LoginController {
