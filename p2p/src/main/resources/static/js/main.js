@@ -4,7 +4,7 @@ var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
 var messageForm = document.querySelector('#messageForm');
-var messageInput = document.querySelector('#message');
+var messageInput = document.querySelector('#repository');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
 
@@ -77,13 +77,13 @@ function onMessageReceived(payload) {
     var messageElement = document.createElement('li');
 
     if(message.type === 'JOIN') {
-        messageElement.classList.add('event-message');
+        messageElement.classList.add('event-repository');
         message.content = message.sender + ' joined!';
     } else if (message.type === 'LEAVE') {
-        messageElement.classList.add('event-message');
+        messageElement.classList.add('event-repository');
         message.content = message.sender + ' left!';
     } else {
-        messageElement.classList.add('chat-message');
+        messageElement.classList.add('chat-repository');
 
         var avatarElement = document.createElement('i');
         var avatarText = document.createTextNode(message.sender[0]);
