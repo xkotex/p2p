@@ -1,6 +1,6 @@
 package com.example.EchoServer.server;
 
-import com.example.EchoServer.controller.MainController;
+import com.example.EchoServer.controller.IPController;
 import com.example.EchoServer.entity.UserConnection;
 
 import java.io.BufferedReader;
@@ -15,7 +15,7 @@ public class ServerThread extends Thread {
     private BufferedReader bufferedReader;
     private InetAddress address;
 
-    MainController mainController = new MainController();
+    IPController mainController = new IPController();
     UserConnection userConnection = new UserConnection();
 
     public ServerThread(Socket socket) throws IOException {

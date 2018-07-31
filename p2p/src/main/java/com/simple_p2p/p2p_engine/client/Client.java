@@ -1,25 +1,17 @@
 package com.simple_p2p.p2p_engine.client;
 
-import com.simple_p2p.entity.KnownUsers;
 import com.simple_p2p.p2p_engine.Utils.NetworkEnvironment;
 import com.simple_p2p.p2p_engine.channels_inits.ClientChannelInitializer;
 import com.simple_p2p.p2p_engine.server.Settings;
-import com.simple_p2p.repository.MessageTableRepository;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import io.netty.util.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-
 import java.net.InetAddress;
-import java.security.Security;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Client {

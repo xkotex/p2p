@@ -1,5 +1,6 @@
 package com.simple_p2p.p2p_engine.server;
 
+import com.simple_p2p.controller.SignalClient;
 import com.simple_p2p.p2p_engine.Utils.HashWork;
 import com.simple_p2p.p2p_engine.Utils.NetworkEnvironment;
 import com.simple_p2p.p2p_engine.channels_inits.ServerChannelInitializer;
@@ -24,6 +25,7 @@ public class Server implements Runnable {
     private int port;
     private Channel listenerChannel;
     private Client client;
+    private SignalClient signalClient;
     private String myHash;
     private InetAddress localAddress;
     private String localMacAddress;
@@ -103,6 +105,7 @@ public class Server implements Runnable {
 
             logger.info("Server start");
             client = startClient(connectionsLoop, settings);
+            signalClient = startSignal();
 
             timeEvents.scheduleAtFixedRate(new SendAliveMessageEvent(settings.getConnectedChannelGroup()), 5000, 5000);
             timeEvents.scheduleAtFixedRate(new RefreshAliveStatusFromChannels(settings.getConnectedChannelGroup()), 20000, 20000);
@@ -125,6 +128,16 @@ public class Server implements Runnable {
             e.printStackTrace();
         }
         return client;
+    }
+
+    private SignalClient startSignal(){
+        signalClient = new SignalClient();
+        try {
+            signalClient.run();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return signalClient;
     }
 
 

@@ -14,11 +14,6 @@ public class UserConnection {
     @Column(name = "inet_adress")
     private String inetAddress;
 
-    /*
-    @Column(name = "name_user")
-    private String user;
-    */
-
     @Column(name = "online")
     private int online;
 

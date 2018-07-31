@@ -1,4 +1,4 @@
-package com.example.EchoServer;
+package com.simple_p2p.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,8 +8,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class DemoClient {
-    public static void main(String[] args) {
+public class SignalClient {
+
+    public static void run() {
         Socket socket = null;
         BufferedReader bufferedReader = null;
         try {
@@ -46,4 +47,5 @@ public class DemoClient {
             }
         }
     }
+
 }
