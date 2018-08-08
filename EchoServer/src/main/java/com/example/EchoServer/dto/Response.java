@@ -2,17 +2,17 @@ package com.example.EchoServer.dto;
 
 public class Response {
 
-    private boolean checkEmail;
+    private boolean checkRegistration;
 
     public Response(boolean checkEmail) {
-        this.checkEmail = checkEmail;
+        this.checkRegistration = checkEmail;
     }
 
-    public boolean isCheckEmail() {
-        return checkEmail;
+    public boolean isCheckRegistration() {
+        return checkRegistration;
     }
 
-    public void setCheckEmail(boolean checkEmail) {
-        this.checkEmail = checkEmail;
+    public void setCheckRegistration(boolean checkRegistration) {
+        this.checkRegistration = checkRegistration;
     }
 }

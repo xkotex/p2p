@@ -1,5 +1,7 @@
 package com.simple_p2p.controller;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,10 +14,10 @@ public class PostRequest {
 
     private static HttpURLConnection con;
 
-    public void postRequest(String email) throws IOException {
+    public void postRequest(String name, String lastName, String email, String password) throws IOException {
 
         String url = "http://localhost:8080/registration";
-        String urlParameters = "emailUser=" + email;
+        String urlParameters = "name=" + name + "&lastName=" + lastName + "&emailUser=" + email + "&password=" + password;
         byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
 
         try {
@@ -46,10 +48,8 @@ public class PostRequest {
                 }
             }
 
-            System.out.println(content.toString());
-
+            //System.out.println(content.toString());
         } finally {
-
             con.disconnect();
         }
     }
