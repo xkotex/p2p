@@ -43,12 +43,21 @@ public class SimpleP2P {
 		return new P2PServerControlImpl(server,settings);
 	}
 
-	@Bean
+	/*@Bean
 	public DataSource dataSource() {
 		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 		dataSourceBuilder.driverClassName("org.sqlite.JDBC");
 		dataSourceBuilder.url("jdbc:sqlite:simple_p2p.db");
 		return dataSourceBuilder.build();
+	}*/
 
+	@Bean
+	public DataSource dataSource(){
+		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+		dataSourceBuilder.driverClassName("com.mysql.jdbc.Driver");
+		dataSourceBuilder.url("jdbc:mysql://localhost/signal_server");
+		dataSourceBuilder.username("root");
+		dataSourceBuilder.password("root");
+		return dataSourceBuilder.build();
 	}
 }

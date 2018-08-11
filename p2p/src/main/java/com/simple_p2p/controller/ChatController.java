@@ -3,7 +3,9 @@ package com.simple_p2p.controller;
 import com.simple_p2p.entity.MessageTable;
 import com.simple_p2p.model.ChatMessage;
 import com.simple_p2p.p2p_engine.p2pcontrol.interfaces.P2PServerControl;
-import com.simple_p2p.repository.MessageTableRepository;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,16 +19,28 @@ import java.time.LocalDateTime;
 @Controller
 public class ChatController {
 
-    private String userHash;
+    @Autowired
+    private static SessionFactory sessionFactory;
+
+    static {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.configure();
+
+            sessionFactory = configuration.buildSessionFactory();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
     @Autowired
     private P2PServerControl p2PServerControl;
 
-    private MessageTableRepository messageTableRepository;
+    /*private MessageTableRepository messageTableRepository;
 
     public ChatController(MessageTableRepository messageTableRepository){
         this.messageTableRepository = messageTableRepository;
-    }
+    }*/
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
@@ -50,6 +64,11 @@ public class ChatController {
         messageTable.setCreated(LocalDateTime.now());
         messageTable.setUserName(username);
         messageTable.setMessage(message);
-        messageTableRepository.save(messageTable);
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.saveOrUpdate(messageTable);
+        session.getTransaction().commit();
+        session.close();
+        //messageTableRepository.save(messageTable);
     }
 }
