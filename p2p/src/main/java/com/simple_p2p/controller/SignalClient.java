@@ -15,10 +15,8 @@ public class SignalClient {
         BufferedReader bufferedReader = null;
         try {
             socket = new Socket(InetAddress.getLocalHost(), 8071);
-
             PrintStream printStream = new PrintStream(socket.getOutputStream());
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
             while (true) {
                 printStream.println("CONNECT");
                 System.out.println(bufferedReader.readLine());

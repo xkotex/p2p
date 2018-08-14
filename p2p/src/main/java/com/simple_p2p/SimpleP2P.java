@@ -20,8 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SpringBootApplication
 public class SimpleP2P {
 
-
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		SpringApplication.run(SimpleP2P.class, args);
 	}
 
@@ -41,23 +40,5 @@ public class SimpleP2P {
 	public P2PServerControl p2PServerControl(Settings settings){
 		Server server = ServerFactory.getServerInstance(settings);
 		return new P2PServerControlImpl(server,settings);
-	}
-
-	/*@Bean
-	public DataSource dataSource() {
-		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-		dataSourceBuilder.driverClassName("org.sqlite.JDBC");
-		dataSourceBuilder.url("jdbc:sqlite:simple_p2p.db");
-		return dataSourceBuilder.build();
-	}*/
-
-	@Bean
-	public DataSource dataSource(){
-		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-		dataSourceBuilder.driverClassName("com.mysql.jdbc.Driver");
-		dataSourceBuilder.url("jdbc:mysql://localhost/signal_server");
-		dataSourceBuilder.username("root");
-		dataSourceBuilder.password("root");
-		return dataSourceBuilder.build();
 	}
 }

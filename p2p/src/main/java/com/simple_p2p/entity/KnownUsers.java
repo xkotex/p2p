@@ -1,7 +1,5 @@
 package com.simple_p2p.entity;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import java.util.Objects;
 

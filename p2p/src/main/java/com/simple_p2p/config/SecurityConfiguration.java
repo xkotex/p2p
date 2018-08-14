@@ -23,10 +23,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Value("select email, password, active from user where email=?")
+    @Value("${spring.queries.users-query}")
     private String usersQuery;
 
-    @Value("select u.email, r.role from user u inner join user_role ur on(u.user_id=ur.user_id) inner join role r on(ur.role_id=r.role_id) where u.email=?")
+    @Value("${spring.queries.roles-query}")
     private String rolesQuery;
 
     @Override
@@ -42,7 +42,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.
                 authorizeRequests()
                 .antMatchers("/").permitAll()
@@ -66,7 +65,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }
-
-
-
 }

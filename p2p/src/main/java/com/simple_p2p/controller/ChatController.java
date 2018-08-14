@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
-
 @Controller
 public class ChatController {
 

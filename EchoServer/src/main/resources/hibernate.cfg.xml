@@ -12,7 +12,5 @@
         <property name="hbm2ddl.auto">update</property>
         <property name="current_session_context_class">thread</property>
         <mapping class="com.example.EchoServer.entity.UserConnection"/>
-        <mapping class="com.example.EchoServer.entity.User"/>
-        <mapping class="com.example.EchoServer.entity.Role"/>
     </session-factory>
 </hibernate-configuration>

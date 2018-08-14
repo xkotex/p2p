@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<div class="container" id="form-signin">
+<div class="container" th:class="form-signin">
 	<img th:src="@{/images/logo.jpg}" class="img-responsive center-block" width="300" height="300" alt="Logo" />
 	<form th:action="@{/login}" method="POST" >
 		<h3 class="form-signin-heading" th:text="Welcome"></h3>

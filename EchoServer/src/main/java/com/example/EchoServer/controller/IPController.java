@@ -6,6 +6,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+
 public class IPController {
 
     @Autowired
@@ -24,6 +26,7 @@ public class IPController {
 
     public void setOnlineUser(String inetAddress, UserConnection userConnection) {
         userConnection.setInetAddress(inetAddress);
+        userConnection.setDateTime(LocalDateTime.now());
         userConnection.setOnline(1);
         Session session = sessionFactory.openSession();
         session.beginTransaction();
