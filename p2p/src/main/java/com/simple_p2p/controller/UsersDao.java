@@ -1,6 +1,6 @@
 package com.simple_p2p.controller;
 
-import com.simple_p2p.entity.Country;
+import com.simple_p2p.entity.Users;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class UsersDao {
 
-    private static final ArrayList<Country> USERS = new ArrayList<>();
+    private static final ArrayList<Users> USERS = new ArrayList<>();
 
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
@@ -30,7 +30,7 @@ public class UsersDao {
              ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()){
-                USERS.add(new Country(resultSet.getLong(1), resultSet.getString(2)));
+                USERS.add(new Users(resultSet.getLong(1), resultSet.getString(2)));
             }
 
         } catch (SQLException e){
@@ -38,13 +38,13 @@ public class UsersDao {
         }
     }
 
-    public ArrayList<Country> getCountries() {
+    public ArrayList<Users> getCountries() {
         return USERS;
     }
 
     public Map<Long, String> getMapCountries() {
         Map<Long, String> map = new HashMap<Long, String>();
-        for (Country c : USERS) {
+        for (Users c : USERS) {
             map.put(c.getUsersId(), c.getUsersName());
         }
         return map;

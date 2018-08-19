@@ -1,15 +1,15 @@
 package com.simple_p2p.entity;
 
-public class Country {
+public class Users {
 
     private Long usersId;
     private String usersName;
 
-    public Country() {
+    public Users() {
 
     }
 
-    public Country(Long usersId, String usersName) {
+    public Users(Long usersId, String usersName) {
         super();
         this.usersId = usersId;
         this.usersName = usersName;

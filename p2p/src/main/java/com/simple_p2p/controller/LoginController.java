@@ -78,7 +78,7 @@ public class LoginController {
 		PersonForm form = new PersonForm();
 		model.addAttribute("personForm", form);
 
-		ArrayList<Country> list = usersDao.getCountries();
+		ArrayList<Users> list = usersDao.getCountries();
 		model.addAttribute("users", list);
 
 		return "settings";
