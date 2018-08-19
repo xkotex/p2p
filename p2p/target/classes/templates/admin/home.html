@@ -19,6 +19,10 @@
 				<p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
 			</div>
 		</div>
+		<form th:action="@{/settings}" method="get">
+			<button class="btn btn-md btn-info btn-block" name="setting"
+					type="Submit">Setting</button>
+		</form>
 		<form th:action="@{/logout}" method="get">
 			<button class="btn btn-md btn-danger btn-block" name="registration"
 					type="Submit">Logout</button>

@@ -1,23 +1,27 @@
 package com.simple_p2p.controller;
 
-import com.simple_p2p.entity.User;
+import com.simple_p2p.entity.*;
 import com.simple_p2p.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 @Controller
 public class LoginController {
 
 	@Autowired
 	private UserService userService;
+
+	private UsersDao usersDao = new UsersDao();
 
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public ModelAndView login(){
@@ -66,5 +70,17 @@ public class LoginController {
 		modelAndView.addObject("adminMessage","You are logined! Hello test");
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/settings" }, method = RequestMethod.GET)
+	public String selectOptionExample1Page(Model model) {
+
+		PersonForm form = new PersonForm();
+		model.addAttribute("personForm", form);
+
+		ArrayList<Country> list = usersDao.getCountries();
+		model.addAttribute("users", list);
+
+		return "settings";
 	}
 }
