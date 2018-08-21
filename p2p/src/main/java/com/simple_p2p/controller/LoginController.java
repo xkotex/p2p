@@ -1,6 +1,7 @@
 package com.simple_p2p.controller;
 
 import com.simple_p2p.entity.*;
+import com.simple_p2p.repository.ChatRepository;
 import com.simple_p2p.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -8,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,10 +20,14 @@ import java.util.ArrayList;
 @Controller
 public class LoginController {
 
+
 	@Autowired
 	private UserService userService;
 
 	private UsersDao usersDao = new UsersDao();
+
+	@Autowired
+	private ChatRepository chatRepository;
 
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public ModelAndView login(){
@@ -73,14 +79,29 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = { "/settings" }, method = RequestMethod.GET)
-	public String selectOptionExample1Page(Model model) {
+	public String selectUsersOnline(Model model) {
 
 		PersonForm form = new PersonForm();
 		model.addAttribute("personForm", form);
-
+		model.addAttribute("chat", new Chat());
 		ArrayList<Users> list = usersDao.getCountries();
 		model.addAttribute("users", list);
 
 		return "settings";
+	}
+
+	@RequestMapping(value="/settings", method=RequestMethod.POST)
+	public ModelAndView creatingChatSubmit(@ModelAttribute Chat chat, Model model) {
+		ModelAndView modelAndView = new ModelAndView();
+		model.addAttribute("chat", chat);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findUserByEmail(auth.getName());
+		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+		modelAndView.addObject("adminMessage","You are created chat!");
+		System.out.println(chat.getChatName());
+		System.out.println(chat.getDescription());
+        chatRepository.save(chat);
+		modelAndView.setViewName("/admin/home");
+		return modelAndView;
 	}
 }

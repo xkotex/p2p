@@ -17,9 +17,6 @@ public class Chat {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "check_delete")
-    private int delete;
-
     public int getId() {
         return id;
     }
@@ -44,11 +41,4 @@ public class Chat {
         this.description = description;
     }
 
-    public int getDelete() {
-        return delete;
-    }
-
-    public void setDelete(int delete) {
-        this.delete = delete;
-    }
 }
