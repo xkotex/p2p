@@ -19,6 +19,14 @@
 				<p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
 			</div>
 		</div>
+		<div>
+			<div>
+				<form th:action="@{/sharedchat}">
+					<button class="btn btn-md btn btn-block" name="setting"
+							type="Submit">Shared chat</button>
+				</form>
+			</div>
+		</div>
 		<form th:action="@{/settings}" method="get">
 			<button class="btn btn-md btn-info btn-block" name="setting"
 					type="Submit">Setting</button>

@@ -10,7 +10,7 @@ public class MessageTable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "message_id")
     private int id;
 
     @Column(name = "created")
@@ -56,20 +56,11 @@ public class MessageTable {
         this.message = message;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MessageTable that = (MessageTable) o;
-        return id == that.id &&
-                Objects.equals(created, that.created) &&
-                Objects.equals(userName, that.userName) &&
-                Objects.equals(message, that.message);
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, created, userName, message);
+    public void setId(int id) {
+        this.id = id;
     }
 }

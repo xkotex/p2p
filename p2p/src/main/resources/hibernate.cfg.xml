@@ -10,6 +10,6 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
         <property name="current_session_context_class">thread</property>
-        <mapping class="com.simple_p2p.controller.ChatController"/>
+        <mapping class="com.simple_p2p.entity.MessageTable"/>
     </session-factory>
 </hibernate-configuration>

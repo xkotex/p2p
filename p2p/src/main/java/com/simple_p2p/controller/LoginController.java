@@ -104,4 +104,11 @@ public class LoginController {
 		modelAndView.setViewName("/admin/home");
 		return modelAndView;
 	}
+
+	@RequestMapping(value={"/sharedchat"}, method = RequestMethod.GET)
+	public ModelAndView sharedChat(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("chat");
+		return modelAndView;
+	}
 }
