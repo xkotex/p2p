@@ -5,5 +5,10 @@ public enum MessageType {
     DATA,
     BOOTSTRAP,
     HANDSHAKE,
-    PING
+    PING,
+    FIND,
+    LIST_OF_FILES,
+    GET_FILE_LIST,
+    GET_FILE_PART,
+    ANSWER
 }

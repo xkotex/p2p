@@ -8,9 +8,9 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.net.InetAddress;
 
 
@@ -20,12 +20,14 @@ public class Client {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private InetAddress localAddress;
     private Settings settings;
+    private String signalServerAddress;
 
 
     public Client(EventLoopGroup connectionsLoop, Settings settings) {
         this.settings=settings;
         this.connectionsLoop = connectionsLoop;
         this.localAddress = NetworkEnvironment.getLocalAddress();
+        this.signalServerAddress = settings.getSignalServerAddress();
     }
 
     public void run() throws Exception {
@@ -36,35 +38,17 @@ public class Client {
         clientBootstrap.handler(new ClientChannelInitializer(settings));
         logger.info("Client start");
         connectOnStart();
+
     }
+
 
     private void connectOnStart(){
-        for(int i=80;i<87;i++){
-            int startPort = 16160;
-            for(int j=0;j<2;j++){
-                startPort++;
-                String address = "192.168.0."+i;
-                if(!address.equals(localAddress.getHostAddress())){
-                    connect(address,startPort);
-                }
-            }
-        }
+        logger.info("Connect to signal server");
+        connect(signalServerAddress,8071);
     }
 
-    public void connect(String address, int port){
+    public ChannelFuture connect(String address, int port){
         ChannelFuture channelFuture=clientBootstrap.connect(address, port);
-        channelFuture.awaitUninterruptibly();
-
-        assert channelFuture.isDone();
-
-        if (channelFuture.isCancelled()) {
-
-        } else if (!channelFuture.isSuccess()) {
-
-            logger.info("Connection is failed to "+address+":"+port);
-            channelFuture.channel().close().awaitUninterruptibly();
-        } else {
-            logger.info("Connection is established to "+address+":"+port);
-        }
+        return channelFuture;
     }
 }

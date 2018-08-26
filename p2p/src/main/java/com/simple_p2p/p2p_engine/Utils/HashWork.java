@@ -1,16 +1,18 @@
 package com.simple_p2p.p2p_engine.Utils;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class HashWork {
+
+    private static HashFunction fileBodyHashFunction = Hashing.sha1();
 
     private HashWork() {
     }
 
     public static String giveMyHash() {
-
         byte[] part1 = NetworkEnvironment.getLocalAddress().getAddress();
         byte[] part2 = NetworkEnvironment.getLocalMacAddress();
         byte[] part3 = System.getProperty("user.name").getBytes();
@@ -32,20 +34,9 @@ public class HashWork {
         return result;
     }
 
-    private static String toSHA1(byte[] resultBytes){
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-1");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        StringBuffer result = new StringBuffer();
-
-        for (int i = 0; i < resultBytes.length; i++) {
-            String hex = Integer.toHexString(0xff & resultBytes[i]);
-            if (hex.length() == 1) result.append('0');
-            result.append(hex);
-        }
-        return result.toString();
+    public static String toSHA1(byte[] resultBytes){
+        return fileBodyHashFunction.newHasher().putBytes(resultBytes).hash().toString();
     }
+
+
 }

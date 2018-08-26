@@ -1,7 +1,5 @@
 package com.simple_p2p.p2p_engine.server;
 
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-
 public class ServerFactory {
 
     private static Server thisServer = null;

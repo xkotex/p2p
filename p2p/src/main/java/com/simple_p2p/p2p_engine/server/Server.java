@@ -1,37 +1,42 @@
 package com.simple_p2p.p2p_engine.server;
 
-import com.simple_p2p.controller.SignalClient;
+
+import com.simple_p2p.entity.FileNode;
+import com.simple_p2p.p2p_engine.DBWorker.WriteFromBufferToDBTimeEvent;
 import com.simple_p2p.p2p_engine.Utils.HashWork;
 import com.simple_p2p.p2p_engine.Utils.NetworkEnvironment;
 import com.simple_p2p.p2p_engine.channels_inits.ServerChannelInitializer;
 import com.simple_p2p.p2p_engine.client.Client;
-import com.simple_p2p.p2p_engine.timeevents.RefreshAliveStatusFromChannels;
-import com.simple_p2p.p2p_engine.timeevents.SendAliveMessageEvent;
+import com.simple_p2p.p2p_engine.timeevents.OpenAdditionConnections;
+import com.simple_p2p.p2p_engine.timeevents.fortest.ShareFolderTemporally;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Server implements Runnable {
 
     private int port;
     private Channel listenerChannel;
     private Client client;
-    private SignalClient signalClient;
     private String myHash;
     private InetAddress localAddress;
     private String localMacAddress;
     private InetAddress externalAddress;
     private Settings settings;
-    private Timer timeEvents;
+    private EventLoopGroup listener;
+    private EventLoopGroup connectionsLoop;
+    private ConcurrentHashMap<String, FileNode> inMemoryListOfSharedFiles;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -42,7 +47,10 @@ public class Server implements Runnable {
     public Server(Settings settings) {
         this.settings = settings;
         this.port = settings.getListener_port();
-        this.timeEvents = new Timer();
+        this.listener = new NioEventLoopGroup();
+        this.connectionsLoop = new NioEventLoopGroup();
+        this.client = startClient(connectionsLoop, settings);
+        this.inMemoryListOfSharedFiles = settings.getInMemoryListOfSharedFiles();
     }
 
     public void run() {
@@ -69,13 +77,12 @@ public class Server implements Runnable {
 
     private void showMyInfo() {
         logger.info("My hash: " + myHash);
-        logger.info("My local address: " + localAddress + " | mac address: " + localMacAddress);
-        logger.info("My external address: " + externalAddress);
+        logger.info("My local address: " + localAddress.getHostAddress() + " | mac address: " + localMacAddress);
+        logger.info("My external address: " + externalAddress.getHostAddress());
     }
 
     private void startServer() throws Exception {
-        EventLoopGroup listener = new NioEventLoopGroup();
-        EventLoopGroup connectionsLoop = new NioEventLoopGroup();
+
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(listener, connectionsLoop);
@@ -103,21 +110,30 @@ public class Server implements Runnable {
                 }
             }
 
+            loadInMemoryListOfSharedFiles();
+            startTimeEvents();
             logger.info("Server start");
-            client = startClient(connectionsLoop, settings);
-            signalClient = startSignal();
-
-            timeEvents.scheduleAtFixedRate(new SendAliveMessageEvent(settings.getConnectedChannelGroup()), 5000, 5000);
-            timeEvents.scheduleAtFixedRate(new RefreshAliveStatusFromChannels(settings.getConnectedChannelGroup()), 20000, 20000);
-
 
             listenerChannel.closeFuture().sync();
         } finally {
             connectionsLoop.shutdownGracefully();
             listener.shutdownGracefully();
-
-
         }
+    }
+
+    private void startTimeEvents() {
+        logger.info("Starting time events");
+        Timer writeFromBufferToDBTimeEvent = new Timer("WriteFromBufferToDBTimeEvent", true);
+        writeFromBufferToDBTimeEvent.scheduleAtFixedRate(new WriteFromBufferToDBTimeEvent(), 0, 5000);
+        Timer openAdditionConnections = new Timer("OpenAdditionConnections", true);
+        openAdditionConnections.scheduleAtFixedRate(new OpenAdditionConnections(), 5000, 30000);
+        //testEvents();
+    }
+
+    private void testEvents() {
+        logger.info("Start events for testing functionality");
+        Timer shareFolderTemporally = new Timer("ShareFolderTemporally", true);
+        shareFolderTemporally.scheduleAtFixedRate(new ShareFolderTemporally(), 10000, 20000);
     }
 
     private Client startClient(EventLoopGroup connectionsLoop, Settings settings) {
@@ -130,14 +146,18 @@ public class Server implements Runnable {
         return client;
     }
 
-    private SignalClient startSignal(){
-        signalClient = new SignalClient();
-        try {
-            signalClient.run();
-        } catch (Exception e){
-            e.printStackTrace();
+    private void loadInMemoryListOfSharedFiles() {
+        logger.info("Start load shared file in memory");
+        ArrayList<FileNode> temporalListOfSharedFiles = getSharedFilesList();
+        for (FileNode fileNode : temporalListOfSharedFiles) {
+            inMemoryListOfSharedFiles.put(fileNode.getFileHash(), fileNode);
         }
-        return signalClient;
+        logger.info("End load shared file in memory");
+    }
+
+    private ArrayList<FileNode> getSharedFilesList() {
+        Session session = Settings.getInstance().getSessionFactory().openSession();
+        return (ArrayList<FileNode>) session.createCriteria(FileNode.class).list();
     }
 
 
