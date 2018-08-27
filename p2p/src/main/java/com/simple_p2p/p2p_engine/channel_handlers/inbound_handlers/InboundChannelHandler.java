@@ -72,6 +72,7 @@ public class InboundChannelHandler extends ChannelInboundHandlerAdapter {
 
     private void updateDBFromBootstrap(Message message) {
         DBWriteBuffer dbWriteBuffer = DBWriteBuffer.getInstance();
+        settings.getOnline_users().clear();
         for (UserConnection uc:message.getUserConnections()){
             settings.getOnline_users().add(uc.getInetAddress());
             UserConnection userConnection = new UserConnection();

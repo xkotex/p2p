@@ -2,6 +2,7 @@ package com.simple_p2p.controller;
 
 import com.simple_p2p.entity.MessageTable;
 import com.simple_p2p.model.ChatMessage;
+import com.simple_p2p.p2p_engine.DBWorker.DBWriteBuffer;
 import com.simple_p2p.p2p_engine.p2pcontrol.interfaces.P2PServerControl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,8 +40,8 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        saveMessageToTable(chatMessage.getSender(), chatMessage.getContent());
         p2PServerControl.sendMessageToAllConnect(chatMessage);
+        saveMessageToTable(chatMessage.getSender(), chatMessage.getContent());
         return chatMessage;
     }
 
@@ -62,8 +63,10 @@ public class ChatController {
         session.saveOrUpdate(messageTable);
         session.getTransaction().commit();
         session.close();*/
-        insertSqlite(messageTable);
+        //insertSqlite(messageTable);
         //messageTableRepository.save(messageTable);
+        DBWriteBuffer dbWriteBuffer = DBWriteBuffer.getInstance();
+        dbWriteBuffer.addEntityToDB(messageTable);
     }
 
     private void insertSqlite(MessageTable messageTable){

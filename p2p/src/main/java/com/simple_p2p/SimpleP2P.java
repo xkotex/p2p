@@ -9,6 +9,8 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.DefaultEventExecutor;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +24,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @SpringBootApplication
 public class SimpleP2P {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleP2P.class, args);
@@ -39,18 +43,15 @@ public class SimpleP2P {
 		configuration.configure();
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		settings.setSessionFactory(sessionFactory);
-		settings.setSignalServerAddress("192.168.0.84");
+		settings.setSignalServerAddress("192.168.0.101");
 		settings.setSignalServerPort(8071);
-/*		DBWriteHandler dbWriteHandler = DBWriteHandler.getInstance();
-		settings.setDbWriteHandler(dbWriteHandler);*/
-/*        CopyOnWriteArrayList<FileNode> fileNodes = new CopyOnWriteArrayList<>();
-        fileNodes.addAll(fileNodeRepository.findAll());*/
 		return settings;
 	}
 	@Bean
 	@Autowired
 	public P2PServerControl p2PServerControl(Settings settings){
 		Server server = ServerFactory.getServerInstance(settings);
-		return new P2PServerControlImpl(server,settings);
+		P2PServerControl p2pServerControl = new P2PServerControlImpl(server,settings);
+		return p2pServerControl;
 	}
 }

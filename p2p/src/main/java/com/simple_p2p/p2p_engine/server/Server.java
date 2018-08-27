@@ -7,6 +7,7 @@ import com.simple_p2p.p2p_engine.Utils.HashWork;
 import com.simple_p2p.p2p_engine.Utils.NetworkEnvironment;
 import com.simple_p2p.p2p_engine.channels_inits.ServerChannelInitializer;
 import com.simple_p2p.p2p_engine.client.Client;
+import com.simple_p2p.p2p_engine.timeevents.ConnectionsOnStartup;
 import com.simple_p2p.p2p_engine.timeevents.OpenAdditionConnections;
 import com.simple_p2p.p2p_engine.timeevents.fortest.ShareFolderTemporally;
 import io.netty.bootstrap.ServerBootstrap;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -126,14 +128,16 @@ public class Server implements Runnable {
         Timer writeFromBufferToDBTimeEvent = new Timer("WriteFromBufferToDBTimeEvent", true);
         writeFromBufferToDBTimeEvent.scheduleAtFixedRate(new WriteFromBufferToDBTimeEvent(), 0, 5000);
         Timer openAdditionConnections = new Timer("OpenAdditionConnections", true);
-        openAdditionConnections.scheduleAtFixedRate(new OpenAdditionConnections(), 5000, 30000);
+        openAdditionConnections.scheduleAtFixedRate(new OpenAdditionConnections(), 5000, 5000);
         //testEvents();
     }
 
     private void testEvents() {
         logger.info("Start events for testing functionality");
-        Timer shareFolderTemporally = new Timer("ShareFolderTemporally", true);
-        shareFolderTemporally.scheduleAtFixedRate(new ShareFolderTemporally(), 10000, 20000);
+        //Timer shareFolderTemporally = new Timer("ShareFolderTemporally", true);
+        //shareFolderTemporally.scheduleAtFixedRate(new ShareFolderTemporally(), 10000, 20000);
+        Timer connectionsOnStartup = new Timer("ConnectionsOnStartup", true);
+        connectionsOnStartup.scheduleAtFixedRate(new ConnectionsOnStartup(), 10000, 100000);
     }
 
     private Client startClient(EventLoopGroup connectionsLoop, Settings settings) {
@@ -148,16 +152,17 @@ public class Server implements Runnable {
 
     private void loadInMemoryListOfSharedFiles() {
         logger.info("Start load shared file in memory");
-        ArrayList<FileNode> temporalListOfSharedFiles = getSharedFilesList();
+        ArrayList<FileNode> temporalListOfSharedFiles = new ArrayList<>();
+        temporalListOfSharedFiles.addAll(getSharedFilesList());
         for (FileNode fileNode : temporalListOfSharedFiles) {
             inMemoryListOfSharedFiles.put(fileNode.getFileHash(), fileNode);
         }
         logger.info("End load shared file in memory");
     }
 
-    private ArrayList<FileNode> getSharedFilesList() {
+    private List getSharedFilesList() {
         Session session = Settings.getInstance().getSessionFactory().openSession();
-        return (ArrayList<FileNode>) session.createCriteria(FileNode.class).list();
+        return session.createCriteria(FileNode.class).list();
     }
 
 

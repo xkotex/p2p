@@ -38,7 +38,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/settings}" th:object="${chat}" method="post">
+                <form th:action="@{/admin/home}" th:object="${chat}" method="post">
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Chat Name:</label>
                         <input type="text" class="form-control" id="recipient-name" th:field="*{chatName}">

@@ -2,6 +2,7 @@ package com.simple_p2p.p2p_engine.client;
 
 import com.simple_p2p.p2p_engine.Utils.NetworkEnvironment;
 import com.simple_p2p.p2p_engine.channels_inits.ClientChannelInitializer;
+import com.simple_p2p.p2p_engine.p2pcontrol.interfaces.P2PServerControl;
 import com.simple_p2p.p2p_engine.server.Settings;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;

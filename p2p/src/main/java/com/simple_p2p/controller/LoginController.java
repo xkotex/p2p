@@ -26,6 +26,8 @@ public class LoginController {
 
 	private UsersDao usersDao = new UsersDao();
 
+	private ChatDao chatDao = new ChatDao();
+
 	@Autowired
 	private ChatRepository chatRepository;
 
@@ -69,7 +71,13 @@ public class LoginController {
 
 	@RequestMapping(value="/admin/home", method = RequestMethod.GET)
 	public ModelAndView home(){
+		chatDao.getChats().clear();
 		ModelAndView modelAndView = new ModelAndView();
+		ChatForm chatForm = new ChatForm();
+		chatDao.initData();
+		modelAndView.addObject("chatForm", chatForm);
+		ArrayList<Chats> list = chatDao.getChats();
+		modelAndView.addObject("chats", list);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
 		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
@@ -80,22 +88,29 @@ public class LoginController {
 
 	@RequestMapping(value = { "/settings" }, method = RequestMethod.GET)
 	public String selectUsersOnline(Model model) {
-
+		usersDao.getUsers().clear();
 		PersonForm form = new PersonForm();
+		usersDao.initData();
 		model.addAttribute("personForm", form);
 		model.addAttribute("chat", new Chat());
-		ArrayList<Users> list = usersDao.getCountries();
+		ArrayList<Users> list = usersDao.getUsers();
 		model.addAttribute("users", list);
 
 		return "settings";
 	}
 
-	@RequestMapping(value="/settings", method=RequestMethod.POST)
+	@RequestMapping(value="/admin/home", method=RequestMethod.POST)
 	public ModelAndView creatingChatSubmit(@ModelAttribute Chat chat, Model model) {
 		ModelAndView modelAndView = new ModelAndView();
+		chatDao.getChats().clear();
 		model.addAttribute("chat", chat);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		chatDao.initData();
+		ChatForm chatForm = new ChatForm();
+		modelAndView.addObject("chatForm", chatForm);
+		ArrayList<Chats> list = chatDao.getChats();
+		modelAndView.addObject("chats", list);
 		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
 		modelAndView.addObject("adminMessage","You are created chat!");
 		System.out.println(chat.getChatName());

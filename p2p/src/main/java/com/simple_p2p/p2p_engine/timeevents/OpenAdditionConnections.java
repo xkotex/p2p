@@ -41,13 +41,13 @@ public class OpenAdditionConnections extends TimerTask {
                     if (online_users_ip.equals(ip)) {
                         userFromOnlineListIsNotConnected = false;
                     }
-                    if (online_users_ip.equals(myIp)) {
-                        userFromOnlineListIsNotMe = false;
-                    }
-                    if (userFromOnlineListIsNotConnected && userFromOnlineListIsNotMe) {
-                        System.out.println("connect");
-                        p2pServerControl.connectTo(online_users_ip);
-                    }
+                }
+                if (online_users_ip.equals(myIp)) {
+                    userFromOnlineListIsNotMe = false;
+                }
+                if (userFromOnlineListIsNotConnected && userFromOnlineListIsNotMe) {
+                    System.out.println("connect");
+                    p2pServerControl.connectTo(online_users_ip);
                 }
             }
         }

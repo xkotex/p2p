@@ -21,9 +21,5 @@ public class ShareFolderTemporally extends TimerTask {
         File file = new File("D:\\nokia numbers");
         nodeArrayList.add(file);
         p2pServerControl.shareDirOrFiles(nodeArrayList);
-/*        ConcurrentHashMap<String,FileNode> inMemory = Settings.getInstance().getInMemoryListOfSharedFiles();
-        for (Map.Entry<String,FileNode> entry:inMemory.entrySet()){
-            System.out.println(entry.getValue().toString());
-        }*/
     }
 }

@@ -40,6 +40,10 @@ public class P2PServerControlImpl implements P2PServerControl {
 
     public Channel connectTo(String ipAddress) {
         int port = settings.getListener_port();
+        return connectTo(ipAddress,port);
+    }
+
+    public Channel connectTo(String ipAddress, int port) {
         Channel channel = null;
 
         for (int i = 0; i < 5; i++) {
@@ -52,10 +56,10 @@ public class P2PServerControlImpl implements P2PServerControl {
 
             } else if (!connectedFuture.isSuccess()) {
 
-                logger.info("Connection is failed to " + ipAddress + ":" + port + i);
+                logger.info("Connection is failed to " + ipAddress + ":" + (port + i));
                 connectedFuture.channel().close().awaitUninterruptibly();
             } else {
-                logger.info("Connection is established to " + ipAddress + ":" + port + i);
+                logger.info("Connection is established to " + ipAddress + ":" + (port + i));
                 channel=connectedFuture.channel();
                 break;
             }

@@ -1,12 +1,13 @@
 package com.simple_p2p.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "message_history")
-public class MessageTable {
+public class MessageTable implements Serializable, EntityUniqueConstrain {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -62,5 +63,15 @@ public class MessageTable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUniqueConstrainName() {
+        return "created";
+    }
+
+    @Override
+    public Object getUniqueConstrainValue() {
+        return created;
     }
 }

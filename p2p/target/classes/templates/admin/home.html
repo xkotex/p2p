@@ -19,14 +19,19 @@
 				<p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
 			</div>
 		</div>
-		<div>
-			<div>
-				<form th:action="@{/sharedchat}">
-					<button class="btn btn-md btn btn-block" name="setting"
-							type="Submit">Shared chat</button>
-				</form>
+		<form name='c' th:object="${chatForm}" th:action="@{/sharedchat}" method='get'>
+			<div class="input-group" style="padding: 20px">
+				<select class="custom-select" th:field="*{chatsId}">
+					<option value=""> -- </option>
+					<option th:each="chats : ${chats}"
+							th:value="${chats.chatsId}"
+							th:utext="${chats.chatsName}"/>
+				</select>
+				<div class="input-group-append">
+					<td><input class="btn btn-outline-secondary" name="submit" type="submit"/>Go to Chat</td>
+				</div>
 			</div>
-		</div>
+		</form>
 		<form th:action="@{/settings}" method="get">
 			<button class="btn btn-md btn-info btn-block" name="setting"
 					type="Submit">Setting</button>
